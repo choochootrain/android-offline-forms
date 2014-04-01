@@ -1,27 +1,30 @@
 package com.choochootrain.offlineform.app.forms;
 
 import android.content.Context;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FormBuilder {
+    private static final String TAG = "FormBuilder";
     private Context context;
 
     public FormBuilder(Context context) {
         this.context = context;
     }
 
-    public void populateForm(LinearLayout layout, String formData) {
-        TextView test = new TextView(context);
-        test.setId(123);
-        test.setText("dynamically generated textview");
+    public void populateForm(LinearLayout layout, String formDataString) {
+        JSONObject formData;
+        try {
+            formData = new JSONObject(formDataString);
+        } catch (JSONException e) {
+           Log.e(TAG, "error parsing json");
+           return;
+        }
 
-        Button test2 = new Button(context);
-        test2.setId(124);
-        test2.setText("dynamically generated button");
-
-        layout.addView(test);
-        layout.addView(test2);
+        Toast.makeText(context, formData.optString("title", "asdf"), Toast.LENGTH_SHORT).show();
     }
 }
