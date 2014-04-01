@@ -1,9 +1,9 @@
 package com.choochootrain.offlineform.app.forms;
 
 import android.content.Context;
-import android.util.Log;
+import android.text.InputType;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -30,12 +30,14 @@ public class FormBuilder {
     private void addFormElement(LinearLayout layout, FormElement element) {
         //TODO implement other types
         if (element.type.equals("text")) {
-            TextView t = new TextView(context);
-            t.setText("text " + element.name);
+            EditText t = new EditText(context);
+            t.setInputType(InputType.TYPE_CLASS_TEXT);
+            t.setText(element.name);
             layout.addView(t);
         } else if (element.type.equals("numeric")) {
-            TextView t = new TextView(context);
-            t.setText("numeric " + element.name);
+            EditText t = new EditText(context);
+            t.setInputType(InputType.TYPE_CLASS_NUMBER);
+            t.setText(element.name);
             layout.addView(t);
         }
     }
