@@ -4,14 +4,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+
+import com.choochootrain.offlineform.app.forms.FormBuilder;
 
 
 public class MainActivity extends ActionBarActivity {
+    private FormBuilder formBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.empty_form);
+
+        LinearLayout formLayout = (LinearLayout)findViewById(R.id.form_layout);
+
+        formBuilder = new FormBuilder(this);
+
+        formBuilder.populateForm(formLayout, "");
     }
 
 
