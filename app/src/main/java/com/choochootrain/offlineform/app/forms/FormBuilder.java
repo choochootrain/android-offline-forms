@@ -14,6 +14,8 @@ public class FormBuilder {
     private static final String TAG = "FormBuilder";
     private Context context;
     private Gson gson;
+    private FormConfig formConfig;
+    private LinearLayout layout;
 
     public FormBuilder(Context context) {
         this.context = context;
@@ -21,7 +23,8 @@ public class FormBuilder {
     }
 
     public void populateForm(final LinearLayout layout, String formDataString) {
-        final FormConfig formConfig = gson.fromJson(formDataString, FormConfig.class);
+        this.layout = layout;
+        formConfig = gson.fromJson(formDataString, FormConfig.class);
 
         Toast.makeText(context, formConfig.title, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < formConfig.elements.length; i++) {
@@ -33,13 +36,29 @@ public class FormBuilder {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String data = ((EditText)layout.findViewById(formConfig.elements[0].id.hashCode())).getText().toString()
-                + ((EditText)layout.findViewById(formConfig.elements[1].id.hashCode())).getText().toString()
-                + ((EditText)layout.findViewById(formConfig.elements[2].id.hashCode())).getText().toString();
-                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                submitData();
             }
         });
         layout.addView(submitButton);
+    }
+
+    private void submitData() {
+        FormData[] data = new FormData[formConfig.elements.length];
+        for (int i = 0; i < formConfig.elements.length; i++) {
+            FormElement element = formConfig.elements[i];
+            //TODO implement other types
+            if (element.type.equals("text")) {
+                EditText t = (EditText) layout.findViewById(element.id.hashCode());
+                data[i] = new FormData();
+                data[i].id = element.id;
+                data[i].value = t.getText().toString();
+            } else if (element.type.equals("numeric")) {
+                EditText t = (EditText) layout.findViewById(element.id.hashCode());
+                data[i] = new FormData();
+                data[i].id = element.id;
+                data[i].value = t.getText().toString();
+            }
+        }
     }
 
     private void addFormElement(LinearLayout layout, FormElement element) {
@@ -68,5 +87,10 @@ public class FormBuilder {
         private String name;
         private String type;
         private String id;
+    }
+
+    private class FormData {
+        private String id;
+        private String value;
     }
 }
