@@ -36,13 +36,13 @@ public class FormBuilder {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitData();
+                FormData[] data = processData();
             }
         });
         layout.addView(submitButton);
     }
 
-    private void submitData() {
+    private FormData[] processData() {
         FormData[] data = new FormData[formConfig.elements.length];
         for (int i = 0; i < formConfig.elements.length; i++) {
             FormElement element = formConfig.elements[i];
@@ -59,6 +59,18 @@ public class FormBuilder {
                 data[i].value = t.getText().toString();
             }
         }
+
+        return data;
+    }
+
+    //TODO use json and store offline
+    private void submitData(FormData[] data) {
+        String s = "";
+        for (int i = 0; i < data.length; i++) {
+           s += data[i].id + ": " + data[i].value + ", ";
+        }
+
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
     }
 
     private void addFormElement(LinearLayout layout, FormElement element) {
