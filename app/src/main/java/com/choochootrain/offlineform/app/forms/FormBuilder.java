@@ -1,6 +1,8 @@
 package com.choochootrain.offlineform.app.forms;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -15,12 +17,14 @@ public class FormBuilder {
 
     private Context context;
     private Gson gson;
+    private ConnectivityManager connectivityManager;
     private FormConfig formConfig;
     private LinearLayout layout;
 
     public FormBuilder(Context context) {
         this.context = context;
         this.gson = new Gson();
+        this.connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public void populateForm(final LinearLayout layout, String formDataString) {
@@ -72,6 +76,25 @@ public class FormBuilder {
         String jsonData = gson.toJson(data);
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
         clearForm();
+
+        //TODO change url
+        if (isOnline())
+            sendPostRequest(jsonData, "127.0.0.1:5000/form");
+        else
+            queuePostRequest(jsonData, "127.0.0.1:5000/form");
+    }
+
+    private boolean isOnline() {
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo.isConnected();
+    }
+
+    private void sendPostRequest(String jsonData, String url) {
+        //TODO implement
+    }
+
+    private void queuePostRequest(String jsonData, String url) {
+        //TODO implement
     }
 
     private void clearForm() {
