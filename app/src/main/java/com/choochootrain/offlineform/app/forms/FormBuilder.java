@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+//TODO refactor
 public class FormBuilder {
     private static final String TAG = "FormBuilder";
     private Context context;
@@ -31,32 +32,35 @@ public class FormBuilder {
             addFormElement(layout, formConfig.elements[i]);
         }
 
-        Button submitButton = new Button(context);
+        final Button submitButton = new Button(context);
         submitButton.setText("submit");
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FormData[] data = processData();
+                FormData data = processData();
+                submitData(data);
             }
         });
         layout.addView(submitButton);
     }
 
-    private FormData[] processData() {
-        FormData[] data = new FormData[formConfig.elements.length];
+    private FormData processData() {
+        FormData data = new FormData();
+        data.title = formConfig.title;
+
         for (int i = 0; i < formConfig.elements.length; i++) {
             FormElement element = formConfig.elements[i];
             //TODO implement other types
             if (element.type.equals("text")) {
                 EditText t = (EditText) layout.findViewById(element.id.hashCode());
-                data[i] = new FormData();
-                data[i].id = element.id;
-                data[i].value = t.getText().toString();
+                data.elements[i] = new FormElementData();
+                data.elements[i].id = element.id;
+                data.elements[i].value = t.getText().toString();
             } else if (element.type.equals("numeric")) {
                 EditText t = (EditText) layout.findViewById(element.id.hashCode());
-                data[i] = new FormData();
-                data[i].id = element.id;
-                data[i].value = t.getText().toString();
+                data.elements[i] = new FormElementData();
+                data.elements[i].id = element.id;
+                data.elements[i].value = t.getText().toString();
             }
         }
 
@@ -64,13 +68,10 @@ public class FormBuilder {
     }
 
     //TODO use json and store offline
-    private void submitData(FormData[] data) {
-        String s = "";
-        for (int i = 0; i < data.length; i++) {
-           s += data[i].id + ": " + data[i].value + ", ";
-        }
+    private void submitData(FormData data) {
+        String jsonData = gson.toJson(data);
 
-        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
     }
 
     private void addFormElement(LinearLayout layout, FormElement element) {
@@ -102,6 +103,11 @@ public class FormBuilder {
     }
 
     private class FormData {
+        private String title;
+        private FormElementData[] elements;
+    }
+
+    private class FormElementData {
         private String id;
         private String value;
     }
