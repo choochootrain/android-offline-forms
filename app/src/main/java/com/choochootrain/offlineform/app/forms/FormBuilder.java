@@ -7,12 +7,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 
 //TODO refactor
 public class FormBuilder {
     private static final String TAG = "FormBuilder";
+
     private Context context;
     private Gson gson;
     private FormConfig formConfig;
@@ -25,7 +25,7 @@ public class FormBuilder {
 
     public void populateForm(final LinearLayout layout, String formDataString) {
         this.layout = layout;
-        formConfig = gson.fromJson(formDataString, FormConfig.class);
+        this.formConfig = gson.fromJson(formDataString, FormConfig.class);
 
         Toast.makeText(context, formConfig.title, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < formConfig.elements.length; i++) {
@@ -70,8 +70,22 @@ public class FormBuilder {
     //TODO use json and store offline
     private void submitData(FormData data) {
         String jsonData = gson.toJson(data);
-
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
+        clearForm();
+    }
+
+    private void clearForm() {
+        for (int i = 0; i < formConfig.elements.length; i++) {
+            FormElement element = formConfig.elements[i];
+            //TODO implement other types
+            if (element.type.equals("text")) {
+                EditText t = (EditText) layout.findViewById(element.id.hashCode());
+                t.setText("");
+            } else if (element.type.equals("numeric")) {
+                EditText t = (EditText) layout.findViewById(element.id.hashCode());
+                t.setText("");
+            }
+        }
     }
 
     private void addFormElement(LinearLayout layout, FormElement element) {
