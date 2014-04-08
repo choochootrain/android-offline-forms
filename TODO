@@ -1,2 +1,3 @@
 add sqlite adapter and store form submissions
 add post method to clear db
+handle files
