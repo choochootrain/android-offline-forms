@@ -4,12 +4,24 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.google.gson.Gson;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO refactor
 public class FormBuilder {
@@ -79,7 +91,7 @@ public class FormBuilder {
 
         //TODO change url
         if (isOnline())
-            sendPostRequest(jsonData, "127.0.0.1:5000/form");
+            sendPostRequest(data, "127.0.0.1:5000/form");
         else
             queuePostRequest(jsonData, "127.0.0.1:5000/form");
     }
@@ -89,11 +101,26 @@ public class FormBuilder {
         return networkInfo.isConnected();
     }
 
-    private void sendPostRequest(String jsonData, String url) {
-        //TODO implement
+    private void sendPostRequest(FormData data, String target) {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(target);
+
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(data.elements.length);
+        for (int i = 0; i < data.elements.length; i++) {
+            FormElementData element = data.elements[i];
+            nameValuePairs.add(i, new BasicNameValuePair(element.id, element.value));
+        }
+
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            Toast.makeText(context, "Recieved response: " + response.toString(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
-    private void queuePostRequest(String jsonData, String url) {
+    private void queuePostRequest(String jsonData, String target) {
         //TODO implement
     }
 
