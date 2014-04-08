@@ -20,12 +20,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 //TODO refactor
 public class FormBuilder {
     private static final String TAG = "FormBuilder";
+    private static final String CACHE_FILE = "formdata.json";
 
     private Context context;
     private Gson gson;
@@ -85,15 +90,16 @@ public class FormBuilder {
 
     //TODO use json and store offline
     private void submitData(FormData data) {
+        //TODO change url
+        data.target = "http://127.0.0.1/form";
         String jsonData = gson.toJson(data);
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
         clearForm();
 
-        //TODO change url
         if (isOnline())
-            sendPostRequest(data, "127.0.0.1:5000/form");
+            sendPostRequest(data);
         else
-            queuePostRequest(jsonData, "127.0.0.1:5000/form");
+            cachePostRequest(jsonData);
     }
 
     private boolean isOnline() {
@@ -101,9 +107,9 @@ public class FormBuilder {
         return networkInfo.isConnected();
     }
 
-    private void sendPostRequest(FormData data, String target) {
+    private void sendPostRequest(FormData data) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(target);
+        HttpPost httppost = new HttpPost(data.target);
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(data.elements.length);
         for (int i = 0; i < data.elements.length; i++) {
@@ -120,8 +126,17 @@ public class FormBuilder {
         }
     }
 
-    private void queuePostRequest(String jsonData, String target) {
-        //TODO implement
+    private void cachePostRequest(String jsonData) {
+        //TODO preserve existing cache
+        try {
+            FileOutputStream fos = context.openFileOutput(CACHE_FILE, Context.MODE_PRIVATE);
+            fos.write(jsonData.getBytes());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "cache file not found");
+        } catch (IOException e) {
+            Log.e(TAG, "error writing to file");
+        }
     }
 
     private void clearForm() {
@@ -169,6 +184,7 @@ public class FormBuilder {
     private class FormData {
         private String title;
         private FormElementData[] elements;
+        private String target;
     }
 
     private class FormElementData {
