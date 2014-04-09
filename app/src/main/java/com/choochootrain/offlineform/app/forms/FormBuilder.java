@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -98,7 +99,7 @@ public class FormBuilder {
         if (isOnline())
             sendPostRequest(data);
         else
-            cachePostRequest(jsonData);
+            cachePostRequest(data);
     }
 
     private boolean isOnline() {
@@ -125,17 +126,54 @@ public class FormBuilder {
         }
     }
 
-    private void cachePostRequest(String jsonData) {
-        //TODO preserve existing cache
+    private void cachePostRequest(FormData data) {
+        //TODO refactor this mess
+        String contents = readCacheFile();
+        CacheData cache;
+
+        if (contents.length() == 0)
+            cache = new CacheData();
+        else
+            cache = gson.fromJson(contents, CacheData.class);
+
+        FormData[] oldSubmissions = cache.submissions;
+        cache.submissions = new FormData[oldSubmissions.length + 1];
+        for (int i = 0; i < oldSubmissions.length; i++) {
+            cache.submissions[i] = oldSubmissions[i];
+        }
+
+        cache.submissions[cache.submissions.length - 1] = data;
+        String cacheData = gson.toJson(cache);
+
         try {
             FileOutputStream fos = context.openFileOutput(CACHE_FILE, Context.MODE_PRIVATE);
-            fos.write(jsonData.getBytes());
+            fos.write(cacheData.getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
             Log.e(TAG, "cache file not found");
         } catch (IOException e) {
             Log.e(TAG, "error writing to file");
         }
+    }
+
+    private String readCacheFile() {
+        String contents = "";
+
+        try {
+            FileInputStream fis = context.openFileInput(CACHE_FILE);
+            StringBuffer stringBuffer = new StringBuffer("");
+            byte[] buffer = new byte[1024];
+
+            while (fis.read(buffer) != -1) {
+                stringBuffer.append(new String(buffer));
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "cache file not found");
+        } catch (IOException e) {
+            Log.e(TAG, "error reading from file");
+        }
+
+        return contents;
     }
 
     private void clearForm() {
@@ -189,5 +227,9 @@ public class FormBuilder {
     private class FormElementData {
         private String id;
         private String value;
+    }
+
+    private class CacheData {
+        private FormData[] submissions;
     }
 }
