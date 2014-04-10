@@ -1,5 +1,6 @@
 #simple webapp to listen for requests from app
 from flask import Flask, render_template, request
+import time
 
 app = Flask(__name__)
 
@@ -15,6 +16,14 @@ def form_listener():
         for key in request.form.keys():
             print "%s: %s" % (key, request.form[key])
         print 
+
+    if request.files:
+        print
+        print "Recieved files"
+        for key in request.files.keys():
+            print "%s-%s saved" % (int(time.time()), key)
+            request.files[key].save("%s-%s" % (int(time.time()), key))
+        print
 
         return "success"
     else:
