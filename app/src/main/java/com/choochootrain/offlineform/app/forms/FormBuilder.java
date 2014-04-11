@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.text.format.Time;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -68,6 +69,7 @@ public class FormBuilder {
     private FormData processData() {
         FormData data = new FormData();
         data.title = formConfig.title;
+        data.timestamp = new Time().toMillis(false);
 
         for (int i = 0; i < formConfig.elements.length; i++) {
             FormElement element = formConfig.elements[i];
@@ -220,6 +222,7 @@ public class FormBuilder {
 
     private class FormData {
         private String title;
+        private long timestamp;
         private FormElementData[] elements;
         private String target;
     }
