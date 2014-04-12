@@ -98,10 +98,10 @@ public class FormBuilder {
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
         clearForm();
 
-        if (isOnline())
+        if (isOnline()) {
             flushCache();
             sendPostRequest(data);
-        else
+        } else
             cachePostRequest(data);
     }
 
