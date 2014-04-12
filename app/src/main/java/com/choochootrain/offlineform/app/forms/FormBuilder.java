@@ -99,6 +99,7 @@ public class FormBuilder {
         clearForm();
 
         if (isOnline())
+            flushCache();
             sendPostRequest(data);
         else
             cachePostRequest(data);
@@ -107,6 +108,21 @@ public class FormBuilder {
     private boolean isOnline() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo.isConnected();
+    }
+
+    private void flushCache() {
+        String contents = readCacheFile();
+
+        if (contents.length() != 0) {
+            CacheData cacheData = gson.fromJson(contents, CacheData.class);
+
+            for (int i = 0; i < cacheData.submissions.length; i++) {
+                FormData submission = cacheData.submissions[i];
+                sendPostRequest(submission);
+            }
+        }
+
+        writeCacheFile("");
     }
 
     private void sendPostRequest(FormData data) {
@@ -147,9 +163,13 @@ public class FormBuilder {
         cache.submissions[cache.submissions.length - 1] = data;
         String cacheData = gson.toJson(cache);
 
+        writeCacheFile(cacheData);
+    }
+
+    private void writeCacheFile(String data) {
         try {
             FileOutputStream fos = context.openFileOutput(CACHE_FILE, Context.MODE_PRIVATE);
-            fos.write(cacheData.getBytes());
+            fos.write(data.getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
             Log.e(TAG, "cache file not found");
