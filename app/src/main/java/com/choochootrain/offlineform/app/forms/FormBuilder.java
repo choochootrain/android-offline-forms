@@ -1,14 +1,19 @@
 package com.choochootrain.offlineform.app.forms;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.text.format.Time;
 import com.google.gson.Gson;
@@ -84,6 +89,11 @@ public class FormBuilder {
                 data.elements[i] = new FormElementData();
                 data.elements[i].id = element.id;
                 data.elements[i].value = t.getText().toString();
+            } else if (element.type.equals("select")) {
+               Spinner t = (Spinner)  layout.findViewById(element.id.hashCode());
+                data.elements[i] = new FormElementData();
+                data.elements[i].id = element.id;
+                data.elements[i].value = element.choices[t.getSelectedItemPosition()];
             }
         }
 
@@ -208,11 +218,15 @@ public class FormBuilder {
             } else if (element.type.equals("numeric")) {
                 EditText t = (EditText) layout.findViewById(element.id.hashCode());
                 t.setText("");
+            } else if (element.type.equals("select")) {
+                Spinner t = (Spinner) layout.findViewById(element.id.hashCode());
+                t.setSelected(false);
             }
         }
     }
 
-    private void addFormElement(LinearLayout layout, FormElement element) {
+    //TODO refactor this
+    private void addFormElement(LinearLayout layout, final FormElement element) {
         //TODO implement other types
         if (element.type.equals("text")) {
             EditText t = new EditText(context);
@@ -224,6 +238,11 @@ public class FormBuilder {
             EditText t = new EditText(context);
             t.setInputType(InputType.TYPE_CLASS_NUMBER);
             t.setText(element.name);
+            t.setId(element.id.hashCode());
+            layout.addView(t);
+        } else if (element.type.equals("select")) {
+            Spinner t = new Spinner(context);
+            t.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, element.choices));
             t.setId(element.id.hashCode());
             layout.addView(t);
         }
@@ -238,6 +257,7 @@ public class FormBuilder {
         private String name;
         private String type;
         private String id;
+        private String[] choices;
     }
 
     private class FormData {
