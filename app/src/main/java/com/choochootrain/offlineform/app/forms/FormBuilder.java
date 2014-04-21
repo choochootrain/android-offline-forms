@@ -1,19 +1,16 @@
 package com.choochootrain.offlineform.app.forms;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import android.text.format.Time;
 import com.google.gson.Gson;
@@ -37,6 +34,7 @@ import java.util.List;
 public class FormBuilder {
     private static final String TAG = "FormBuilder";
     private static final String CACHE_FILE = "formdata.json";
+    private static final String DEBUG_URL = "http://127.0.0.1:5000/form";
 
     private Context context;
     private Gson gson;
@@ -102,8 +100,7 @@ public class FormBuilder {
 
     //TODO use json and store offline
     private void submitData(FormData data) {
-        //TODO change url
-        data.target = "http://127.0.0.1/form";
+        data.target = DEBUG_URL;
         String jsonData = gson.toJson(data);
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
         clearForm();
