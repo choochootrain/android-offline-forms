@@ -55,7 +55,7 @@ public class FormBuilder {
 
         Toast.makeText(context, formConfig.title, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < formConfig.elements.length; i++) {
-            formConfig.elements[i].inflate(layout);
+            formConfig.elements[i].inflate(context, layout);
         }
 
         final Button submitButton = new Button(context);
@@ -76,7 +76,7 @@ public class FormBuilder {
         data.timestamp = new Time().toMillis(false);
 
         for (int i = 0; i < formConfig.elements.length; i++) {
-            data.elements[i] = formConfig.elements[i].getData();
+            data.elements[i] = formConfig.elements[i].getData(layout);
         }
 
         return data;
@@ -210,74 +210,5 @@ public class FormBuilder {
                 t.setSelected(false);
             }
         }
-    }
-
-    private class FormConfig {
-        private String title;
-        private FormElement[] elements;
-    }
-
-    private class FormElement {
-        private String name;
-        private String type;
-        private String id;
-        private String[] choices;
-
-        public void inflate(LinearLayout layout) {
-            //TODO implement other types
-            if (this.type.equals("text")) {
-                EditText t = new EditText(context);
-                t.setInputType(InputType.TYPE_CLASS_TEXT);
-                t.setText(this.name);
-                t.setId(this.id.hashCode());
-                layout.addView(t);
-            } else if (this.type.equals("numeric")) {
-                EditText t = new EditText(context);
-                t.setInputType(InputType.TYPE_CLASS_NUMBER);
-                t.setText(this.name);
-                t.setId(this.id.hashCode());
-                layout.addView(t);
-            } else if (this.type.equals("select")) {
-                Spinner t = new Spinner(context);
-                t.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, this.choices));
-                t.setId(this.id.hashCode());
-                layout.addView(t);
-            }
-        }
-
-        public FormElementData getData() {
-            FormElementData data = new FormElementData();
-            data.id = this.id;
-
-            //TODO implement other types
-            if (this.type.equals("text")) {
-                EditText t = (EditText) layout.findViewById(this.id.hashCode());
-                data.value = t.getText().toString();
-            } else if (this.type.equals("numeric")) {
-                EditText t = (EditText) layout.findViewById(this.id.hashCode());
-                data.value = t.getText().toString();
-            } else if (this.type.equals("select")) {
-               Spinner t = (Spinner)  layout.findViewById(this.id.hashCode());
-                data.value = this.choices[t.getSelectedItemPosition()];
-            }
-
-            return data;
-        }
-    }
-
-    private class FormData {
-        private String title;
-        private long timestamp;
-        private FormElementData[] elements;
-        private String target;
-    }
-
-    private class FormElementData {
-        private String id;
-        private String value;
-    }
-
-    private class CacheData {
-        private FormData[] submissions;
     }
 }
