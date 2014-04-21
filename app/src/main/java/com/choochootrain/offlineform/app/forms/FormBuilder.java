@@ -41,6 +41,7 @@ public class FormBuilder {
     private ConnectivityManager connectivityManager;
     private FormConfig formConfig;
     private LinearLayout layout;
+    private int cacheSize;
 
     public FormBuilder(Context context) {
         this.context = context;
@@ -117,7 +118,11 @@ public class FormBuilder {
         return networkInfo.isConnected();
     }
 
-    private void flushCache() {
+    public int getCacheSize() {
+        return cacheSize;
+    }
+
+    public void flushCache() {
         String contents = readCacheFile();
 
         if (contents.length() != 0) {
@@ -169,6 +174,8 @@ public class FormBuilder {
 
         cache.submissions[cache.submissions.length - 1] = data;
         String cacheData = gson.toJson(cache);
+
+        cacheSize = cache.submissions.length;
 
         writeCacheFile(cacheData);
     }

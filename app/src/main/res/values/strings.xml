@@ -4,5 +4,6 @@
     <string name="app_name">Offline Form</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="flush_cache">Sync Offline</string>
 
 </resources>
