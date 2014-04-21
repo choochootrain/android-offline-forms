@@ -3,16 +3,19 @@ package com.choochootrain.offlineform.app.forms;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.text.format.Time;
+
+import com.choochootrain.offlineform.app.forms.data.FormConfig;
+import com.choochootrain.offlineform.app.forms.data.FormData;
+import com.choochootrain.offlineform.app.forms.data.FormElement;
+import com.choochootrain.offlineform.app.forms.data.FormElementData;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;

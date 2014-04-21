@@ -1,4 +1,4 @@
-package com.choochootrain.offlineform.app.forms;
+package com.choochootrain.offlineform.app.forms.data;
 
 import android.content.Context;
 import android.text.InputType;
@@ -8,10 +8,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 public class FormElement {
-    protected String name;
-    protected String type;
-    protected String id;
-    protected String[] choices;
+    public String name;
+    public String type;
+    public String id;
+    public String[] choices;
 
     public void inflate(Context context, LinearLayout layout) {
         //TODO implement other types
