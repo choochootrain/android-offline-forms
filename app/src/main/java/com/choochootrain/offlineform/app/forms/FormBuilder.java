@@ -105,18 +105,7 @@ public class FormBuilder {
 
     private void clearForm() {
         for (int i = 0; i < formConfig.elements.length; i++) {
-            FormElement element = formConfig.elements[i];
-            //TODO implement other types
-            if (element.type.equals("text")) {
-                EditText t = (EditText) layout.findViewById(element.id.hashCode());
-                t.setText("");
-            } else if (element.type.equals("numeric")) {
-                EditText t = (EditText) layout.findViewById(element.id.hashCode());
-                t.setText("");
-            } else if (element.type.equals("select")) {
-                Spinner t = (Spinner) layout.findViewById(element.id.hashCode());
-                t.setSelected(false);
-            }
+            formConfig.elements[i].clear(layout);
         }
     }
 }

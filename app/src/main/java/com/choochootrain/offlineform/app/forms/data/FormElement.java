@@ -53,4 +53,18 @@ public class FormElement {
 
         return data;
     }
+
+    public void clear(LinearLayout layout) {
+        //TODO implement other types
+        if (this.type.equals("text")) {
+            EditText t = (EditText) layout.findViewById(this.id.hashCode());
+            t.setText("");
+        } else if (this.type.equals("numeric")) {
+            EditText t = (EditText) layout.findViewById(this.id.hashCode());
+            t.setText("");
+        } else if (this.type.equals("select")) {
+            Spinner t = (Spinner) layout.findViewById(this.id.hashCode());
+            t.setSelected(false);
+        }
+    }
 }
