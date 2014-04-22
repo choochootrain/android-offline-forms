@@ -15,6 +15,7 @@ public class FormElement {
 
     public void inflate(Context context, LinearLayout layout) {
         //TODO implement other types
+        //TODO insert elements in specified order
         if (this.type.equals("text")) {
             EditText t = new EditText(context);
             t.setInputType(InputType.TYPE_CLASS_TEXT);
