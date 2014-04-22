@@ -3,34 +3,17 @@ package com.choochootrain.offlineform.app.forms;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 import android.text.format.Time;
 
-import com.choochootrain.offlineform.app.forms.queue.QueueData;
 import com.choochootrain.offlineform.app.forms.queue.FormQueue;
 import com.choochootrain.offlineform.app.forms.data.FormConfig;
 import com.choochootrain.offlineform.app.forms.data.FormData;
-import com.choochootrain.offlineform.app.forms.data.FormElement;
-import com.choochootrain.offlineform.app.forms.data.FormElementData;
 import com.choochootrain.offlineform.app.network.Http;
 import com.google.gson.Gson;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //TODO refactor
 public class FormBuilder {
