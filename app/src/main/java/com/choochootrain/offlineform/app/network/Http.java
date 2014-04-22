@@ -22,7 +22,7 @@ public class Http {
     public static final String TAG = "Http";
 
     //TODO async task this
-    public static void post(Context context, FormData data) {
+    public static boolean post(Context context, FormData data) {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(data.target);
 
@@ -36,8 +36,10 @@ public class Http {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             Toast.makeText(context, "Recieved response: " + response.toString(), Toast.LENGTH_SHORT).show();
+            return true;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            return false;
         }
     }
 }

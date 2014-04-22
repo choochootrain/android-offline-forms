@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.choochootrain.offlineform.app.forms.FormBuilder;
+import com.choochootrain.offlineform.app.forms.data.FormData;
+import com.choochootrain.offlineform.app.forms.queue.FormQueue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +24,10 @@ import java.io.Writer;
 
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
+
+    private FormQueue formQueue;
     private FormBuilder formBuilder;
+    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,19 @@ public class MainActivity extends ActionBarActivity {
         formBuilder = new FormBuilder(this);
 
         formBuilder.populateForm(formLayout, readRawResource(R.raw.form));
+
+        submitButton = (Button)findViewById(R.id.submit_button);
+        submitButton.setText("submit");
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FormData data = formBuilder.processData();
+                if (!formBuilder.submitData(data))
+                    formQueue.add(data);
+            }
+        });
+
+        formQueue = new FormQueue(this);
     }
 
     @Override
@@ -53,8 +73,7 @@ public class MainActivity extends ActionBarActivity {
                 //TODO implement
                 break;
             case R.id.flush_cache:
-                if (formBuilder.getCacheSize() > 0)
-                    formBuilder.flushCache();
+                formQueue.flush();
         }
 
         return super.onOptionsItemSelected(item);

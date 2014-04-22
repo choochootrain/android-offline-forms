@@ -42,20 +42,9 @@ public class FormBuilder {
         for (int i = 0; i < formConfig.elements.length; i++) {
             formConfig.elements[i].inflate(context, layout);
         }
-
-        final Button submitButton = new Button(context);
-        submitButton.setText("submit");
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FormData data = processData();
-                submitData(data);
-            }
-        });
-        layout.addView(submitButton);
     }
 
-    private FormData processData() {
+    public FormData processData() {
         FormData data = new FormData();
         data.title = formConfig.title;
         data.timestamp = new Time().toMillis(false);
@@ -68,17 +57,16 @@ public class FormBuilder {
     }
 
     //TODO use json and store offline
-    private void submitData(FormData data) {
+    public boolean submitData(FormData data) {
         data.target = DEBUG_URL;
         String jsonData = gson.toJson(data);
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
         clearForm();
 
-        if (isOnline()) {
-            queue.flush();
-            Http.post(context, data);
-        } else
-            queue.add(data);
+        if (isOnline())
+            return Http.post(context, data);
+        else
+            return false;
     }
 
     private boolean isOnline() {
