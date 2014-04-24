@@ -32,18 +32,20 @@ public class FormQueue {
         this.read();
     }
 
-    private void write() {
+    private boolean write() {
         String data = gson.toJson(queue, QueueData.class);
 
         try {
             FileOutputStream fos = context.openFileOutput(queueLocation, Context.MODE_PRIVATE);
             fos.write(data.getBytes());
             fos.close();
+            return true;
         } catch (FileNotFoundException e) {
             Log.e(TAG, "queue file not found");
         } catch (IOException e) {
             Log.e(TAG, "error writing to file");
         }
+        return false;
     }
 
     private void read() {
