@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity {
 
         formBuilder.populateForm(formLayout, readRawResource(R.raw.form));
 
-        submitButton = (Button)findViewById(R.id.submit_button);
+        submitButton = new Button(this);
         submitButton.setText("submit");
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
                     formQueue.add(data);
             }
         });
+        formLayout.addView(submitButton);
 
         formQueue = new FormQueue(this);
     }
