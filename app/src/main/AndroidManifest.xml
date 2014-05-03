@@ -19,6 +19,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.choochootrain.offlineform.app.EditFormActivity"
+            android:label="@string/edit_form"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
         <receiver
             android:name="com.choochootrain.offlineform.app.network.NetworkChangeReceiver"
             android:label="NetworkChange">

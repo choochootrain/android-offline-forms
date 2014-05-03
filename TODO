@@ -1,3 +1,4 @@
 add post method to clear db
 handle files
 implement all form element types
+use json from external file

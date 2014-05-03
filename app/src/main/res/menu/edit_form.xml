@@ -1,15 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.choochootrain.offlineform.app.MainActivity" >
+    tools:context="com.choochootrain.offlineform.app.EditFormActivity" >
 
-    <item android:id="@+id/edit_form"
-        android:title="@string/edit_form"
+    <item android:id="@+id/load_json"
+        android:title="@string/load_json"
         android:orderInCategory="100"
         app:showAsAction="never" />
 
-    <item android:id="@+id/flush_cache"
-        android:title="@string/flush_cache"
+    <item android:id="@+id/save_json"
+        android:title="@string/save_json"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

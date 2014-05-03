@@ -1,5 +1,6 @@
 package com.choochootrain.offlineform.app;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,8 +70,9 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch(id) {
-            case R.id.action_settings:
-                //TODO implement
+            case R.id.edit_form:
+                Intent intent = new Intent(this, EditFormActivity.class);
+                startActivity(intent);
                 break;
             case R.id.flush_cache:
                 formQueue.flush();

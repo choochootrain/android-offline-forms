@@ -2,8 +2,9 @@
 <resources>
 
     <string name="app_name">Offline Form</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="edit_form">Edit Form</string>
     <string name="flush_cache">Sync Offline</string>
+    <string name="load_json">Load JSON</string>
+    <string name="save_json">Save JSON</string>
 
 </resources>
