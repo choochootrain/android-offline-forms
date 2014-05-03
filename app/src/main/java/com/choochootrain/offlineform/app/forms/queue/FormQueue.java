@@ -69,6 +69,9 @@ public class FormQueue {
             queue = new QueueData();
         else
             queue = gson.fromJson(contents, QueueData.class);
+
+        if (queue.submissions == null)
+            queue.submissions = new FormData[0];
     }
 
     public void add(FormData data) {
