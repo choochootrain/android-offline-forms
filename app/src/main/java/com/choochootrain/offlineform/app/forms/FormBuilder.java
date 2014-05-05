@@ -27,18 +27,16 @@ public class FormBuilder {
     private FormConfig formConfig;
     private LinearLayout layout;
 
-    public FormBuilder(Context context) {
+    public FormBuilder(Context context, LinearLayout layout, String formData) {
         this.context = context;
+        this.layout = layout;
         this.gson = new Gson();
+        this.formConfig = gson.fromJson(formData, FormConfig.class);
         this.connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         this.queue = new FormQueue(context);
     }
 
-    public void populateForm(final LinearLayout layout, String formDataString) {
-        this.layout = layout;
-        this.formConfig = gson.fromJson(formDataString, FormConfig.class);
-
-        Toast.makeText(context, formConfig.title, Toast.LENGTH_SHORT).show();
+    public void populate() {
         for (int i = 0; i < formConfig.elements.length; i++) {
             formConfig.elements[i].inflate(context, layout);
         }

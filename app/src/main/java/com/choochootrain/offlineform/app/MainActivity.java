@@ -37,9 +37,8 @@ public class MainActivity extends ActionBarActivity {
 
         LinearLayout formLayout = (LinearLayout)findViewById(R.id.form_layout);
 
-        formBuilder = new FormBuilder(this);
-
-        formBuilder.populateForm(formLayout, readRawResource(R.raw.form));
+        formBuilder = new FormBuilder(this, formLayout, readRawResource(R.raw.form));
+        formBuilder.populate();
 
         submitButton = new Button(this);
         submitButton.setText("submit");
