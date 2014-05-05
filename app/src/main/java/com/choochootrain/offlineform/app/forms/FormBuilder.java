@@ -3,8 +3,6 @@ package com.choochootrain.offlineform.app.forms;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.text.format.Time;
