@@ -45,7 +45,9 @@ public class EditFormActivity extends ActionBarActivity {
         int id = item.getItemId();
         switch(id) {
             case R.id.load_json:
+                jsonText.setText(readJson());
             case R.id.save_json:
+                writeJson(jsonText.getText().toString());
         }
 
         return super.onOptionsItemSelected(item);
