@@ -37,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
 
         LinearLayout formLayout = (LinearLayout)findViewById(R.id.form_layout);
 
+        //TODO use external file for reading
         formBuilder = new FormBuilder(this, formLayout, readRawResource(R.raw.form));
         formBuilder.populate();
 
