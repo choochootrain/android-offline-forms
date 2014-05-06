@@ -1,4 +1,4 @@
-package com.choochootrain.offlineform.app.forms;
+package com.choochootrain.offlineform.app.forms.builder;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

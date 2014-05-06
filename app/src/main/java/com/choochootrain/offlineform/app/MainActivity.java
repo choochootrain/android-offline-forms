@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.choochootrain.offlineform.app.forms.FormBuilder;
+import com.choochootrain.offlineform.app.forms.builder.FormBuilder;
 import com.choochootrain.offlineform.app.forms.data.FormData;
 import com.choochootrain.offlineform.app.forms.queue.FormQueue;
 
