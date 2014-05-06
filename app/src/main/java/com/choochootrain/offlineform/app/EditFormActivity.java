@@ -1,5 +1,6 @@
 package com.choochootrain.offlineform.app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -8,6 +9,9 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +21,7 @@ import java.io.Writer;
 
 public class EditFormActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
+    private static final String FORM_JSON = "form.json";
 
     private EditText jsonText;
 
@@ -26,7 +31,7 @@ public class EditFormActivity extends ActionBarActivity {
         setContentView(R.layout.edit_form);
 
         jsonText = (EditText) findViewById(R.id.form_json);
-        jsonText.setText(readRawResource(R.raw.form));
+        jsonText.setText(readJson());
     }
 
     @Override
@@ -46,8 +51,29 @@ public class EditFormActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private String readRawResource(int id) {
-        InputStream is = getResources().openRawResource(id);
+    private String readJson() {
+        try {
+            FileInputStream fis = openFileInput(FORM_JSON);
+            return readStream(fis);
+        } catch (FileNotFoundException e) {
+            return "";
+        }
+    }
+
+    private boolean writeJson(String s) {
+        try {
+            FileOutputStream fos = openFileOutput(FORM_JSON, Context.MODE_PRIVATE);
+            fos.write(s.getBytes());
+            fos.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private String readStream(InputStream is) {
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
         try {
