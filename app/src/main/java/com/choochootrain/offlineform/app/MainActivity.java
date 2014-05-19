@@ -3,7 +3,6 @@ package com.choochootrain.offlineform.app;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,17 +10,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.choochootrain.offlineform.app.forms.builder.FormBuilder;
+import com.choochootrain.offlineform.app.forms.data.FormConfig;
 import com.choochootrain.offlineform.app.forms.data.FormData;
 import com.choochootrain.offlineform.app.forms.queue.FormQueue;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-
 
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
@@ -37,8 +28,10 @@ public class MainActivity extends ActionBarActivity {
 
         LinearLayout formLayout = (LinearLayout)findViewById(R.id.form_layout);
 
+        FormConfig.init(this);
+
         //TODO use external file for reading
-        formBuilder = new FormBuilder(this, formLayout, readRawResource(R.raw.form));
+        formBuilder = new FormBuilder(this, formLayout, FormConfig.load(this));
         formBuilder.populate();
 
         submitButton = new Button(this);
@@ -80,28 +73,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    private String readRawResource(int id) {
-        InputStream is = getResources().openRawResource(id);
-        Writer writer = new StringWriter();
-        char[] buffer = new char[1024];
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            int n;
-            while ((n = reader.read(buffer)) != -1) {
-                writer.write(buffer, 0, n);
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "error reading json file");
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                Log.e(TAG, "could not close inputstream");
-            }
-        }
-
-        return writer.toString();
-    }
-
 }
