@@ -26,7 +26,12 @@ public class FormConfig {
     }
 
     public static String load(Context context) {
-        return "";
+        return "{title: 'This is a test form'," +
+                "elements: [" +
+                    "{name: 'Name',type: 'text',id: 'name'}," +
+                    "{name: 'Email address',type: 'text',id: 'email'}," +
+                    "{name: 'Age',type: 'numeric',id: 'age'}" +
+                "]}";
     }
 
     public static void save(Context context, String data) {

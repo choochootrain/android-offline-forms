@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.choochootrain.offlineform.app.forms.data.FormData;
-import com.choochootrain.offlineform.app.network.Http;
+import com.choochootrain.offlineform.app.network.HttpPostTask;
 import com.google.gson.Gson;
 
 import java.io.FileInputStream;
@@ -91,10 +91,9 @@ public class FormQueue {
             return false;
 
         for (int i = 0; i < queue.submissions.length; i++) {
-            Http.post(context, queue.submissions[i]);
+            new HttpPostTask(context, queue.submissions[i], this).execute();
         }
 
-        queue.submissions = new FormData[0];
         write();
         return true;
     }

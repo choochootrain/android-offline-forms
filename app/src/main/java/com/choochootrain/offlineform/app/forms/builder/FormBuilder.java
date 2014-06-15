@@ -10,18 +10,17 @@ import android.text.format.Time;
 import com.choochootrain.offlineform.app.forms.queue.FormQueue;
 import com.choochootrain.offlineform.app.forms.data.FormConfig;
 import com.choochootrain.offlineform.app.forms.data.FormData;
-import com.choochootrain.offlineform.app.network.Http;
+import com.choochootrain.offlineform.app.network.HttpPostTask;
 import com.google.gson.Gson;
 
 //TODO refactor
 public class FormBuilder {
     private static final String TAG = "FormBuilder";
-    private static final String DEBUG_URL = "http://127.0.0.1:5000/form";
+    private static final String DEBUG_URL = "http://192.168.1.65:5000/form";
 
     private Context context;
     private Gson gson;
     private ConnectivityManager connectivityManager;
-    private FormQueue queue;
     private FormConfig formConfig;
     private LinearLayout layout;
 
@@ -31,7 +30,6 @@ public class FormBuilder {
         this.gson = new Gson();
         this.formConfig = gson.fromJson(formData, FormConfig.class);
         this.connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        this.queue = new FormQueue(context);
     }
 
     public void populate() {
@@ -41,7 +39,7 @@ public class FormBuilder {
     }
 
     public FormData processData() {
-        FormData data = new FormData();
+        FormData data = new FormData(formConfig.elements.length);
         data.title = formConfig.title;
         data.timestamp = new Time().toMillis(false);
 
@@ -53,16 +51,17 @@ public class FormBuilder {
     }
 
     //TODO use json and store offline
-    public boolean submitData(FormData data) {
+    public void submitData(FormData data, FormQueue queue) {
         data.target = DEBUG_URL;
         String jsonData = gson.toJson(data);
         Toast.makeText(context, jsonData, Toast.LENGTH_SHORT).show();
         clearForm();
 
-        if (isOnline())
-            return Http.post(context, data);
-        else
-            return false;
+        if (isOnline()) {
+            new HttpPostTask(context, data, queue).execute();
+        } else {
+            queue.add(data);
+        }
     }
 
     private boolean isOnline() {

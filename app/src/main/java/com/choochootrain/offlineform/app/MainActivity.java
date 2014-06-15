@@ -40,8 +40,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 FormData data = formBuilder.processData();
-                if (!formBuilder.submitData(data))
-                    formQueue.add(data);
+                formBuilder.submitData(data, formQueue);
             }
         });
         formLayout.addView(submitButton);

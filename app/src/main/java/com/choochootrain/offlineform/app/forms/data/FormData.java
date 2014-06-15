@@ -5,4 +5,12 @@ public class FormData {
     public long timestamp;
     public FormElementData[] elements;
     public String target;
+
+    public FormData() {
+        this(0);
+    }
+
+    public FormData(int numElements) {
+        this.elements = new FormElementData[numElements];
+    }
 }
