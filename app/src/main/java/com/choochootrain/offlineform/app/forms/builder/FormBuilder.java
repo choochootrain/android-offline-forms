@@ -28,8 +28,12 @@ public class FormBuilder {
         this.context = context;
         this.layout = layout;
         this.gson = new Gson();
-        this.formConfig = gson.fromJson(formData, FormConfig.class);
+        load(formData);
         this.connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    public void load(String formData) {
+        this.formConfig = gson.fromJson(formData, FormConfig.class);
     }
 
     public void populate() {

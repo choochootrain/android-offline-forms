@@ -3,6 +3,8 @@ package com.choochootrain.offlineform.app.forms.data;
 import android.content.Context;
 import android.util.Log;
 
+import com.choochootrain.offlineform.app.R;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,23 +24,25 @@ public class FormConfig {
     public FormElement[] elements;
 
     public static void init(Context context) {
-
+        try {
+            FileInputStream fis = context.openFileInput(FORM_JSON);
+            fis.close();
+        } catch (FileNotFoundException e) {
+            FormConfig.writeJson(context, FormConfig.readRawResource(context, R.raw.form));
+        } catch (IOException e) {
+            return;
+        }
     }
 
     public static String load(Context context) {
-        return "{title: 'This is a test form'," +
-                "elements: [" +
-                    "{name: 'Name',type: 'text',id: 'name'}," +
-                    "{name: 'Email address',type: 'text',id: 'email'}," +
-                    "{name: 'Age',type: 'numeric',id: 'age'}" +
-                "]}";
+        return FormConfig.readJson(context);
     }
 
     public static void save(Context context, String data) {
-
+        FormConfig.writeJson(context, data);
     }
 
-    private String readRawResource(Context context, int id) {
+    private static String readRawResource(Context context, int id) {
         InputStream is = context.getResources().openRawResource(id);
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
@@ -61,7 +65,7 @@ public class FormConfig {
         return writer.toString();
     }
 
-    private String readJson(Context context) {
+    private static String readJson(Context context) {
         try {
             FileInputStream fis = context.openFileInput(FORM_JSON);
             return readStream(fis);
@@ -70,7 +74,7 @@ public class FormConfig {
         }
     }
 
-    private boolean writeJson(Context context, String s) {
+    private static boolean writeJson(Context context, String s) {
         try {
             FileOutputStream fos = context.openFileOutput(FORM_JSON, Context.MODE_PRIVATE);
             fos.write(s.getBytes());
@@ -83,7 +87,7 @@ public class FormConfig {
         }
     }
 
-    private String readStream(InputStream is) {
+    private static String readStream(InputStream is) {
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
         try {

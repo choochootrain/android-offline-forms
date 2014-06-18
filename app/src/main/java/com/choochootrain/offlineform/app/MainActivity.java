@@ -20,13 +20,14 @@ public class MainActivity extends ActionBarActivity {
     private FormQueue formQueue;
     private FormBuilder formBuilder;
     private Button submitButton;
+    private LinearLayout formLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.empty_form);
 
-        LinearLayout formLayout = (LinearLayout)findViewById(R.id.form_layout);
+        formLayout = (LinearLayout)findViewById(R.id.form_layout);
 
         FormConfig.init(this);
 
@@ -46,6 +47,17 @@ public class MainActivity extends ActionBarActivity {
         formLayout.addView(submitButton);
 
         formQueue = new FormQueue(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //clear and reload from FormConfig data
+        formLayout.removeAllViews();
+        formBuilder.load(FormConfig.load(this));
+        formBuilder.populate();
+        formLayout.addView(submitButton);
     }
 
     @Override
