@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 //TODO refactor
 public class FormBuilder {
     private static final String TAG = "FormBuilder";
-    private static final String DEBUG_URL = "http://192.168.1.65:5000/form";
+    private static final String DEBUG_URL = "http://10.20.74.54:5000/form";
 
     private Context context;
     private Gson gson;
