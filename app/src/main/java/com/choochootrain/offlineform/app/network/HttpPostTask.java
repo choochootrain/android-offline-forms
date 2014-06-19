@@ -45,12 +45,26 @@ public class HttpPostTask extends AsyncTask<Void, Void, Boolean> {
         try {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
-            Log.d(TAG, "Recieved response: " + response.toString());
-            return true;
+            if (response.getStatusLine().getStatusCode() == 200) {
+                Log.d(TAG, "Recieved response: " + response.toString());
+                doTaskSuccess();
+                return true;
+            } else {
+                doTaskFail();
+                return false;
+            }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
-            formQueue.add(formData);
+            doTaskFail();
             return false;
         }
+    }
+
+    private void doTaskSuccess() {
+        formQueue.remove(formData);
+    }
+
+    private void doTaskFail() {
+        formQueue.add(formData);
     }
 }

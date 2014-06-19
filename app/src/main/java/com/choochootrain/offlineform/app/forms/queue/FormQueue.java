@@ -86,6 +86,22 @@ public class FormQueue {
         write();
     }
 
+    //TODO use hashed FormData objects instead of timestamp
+    public void remove(FormData data) {
+        FormData[] oldSubmissions = queue.submissions;
+        queue.submissions = new FormData[oldSubmissions.length - 1];
+
+        int j = 0;
+        for (int i = 0; i < oldSubmissions.length; i++) {
+            if (oldSubmissions[i].timestamp != data.timestamp) {
+                queue.submissions[j] = oldSubmissions[i];
+                j++;
+            }
+        }
+
+        write();
+    }
+
     public boolean flush() {
         if (queue.submissions.length == 0)
             return false;

@@ -96,7 +96,7 @@ public class FormBuilder {
 
     private boolean isOnline() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo.isConnected();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     private void clearForm() {
