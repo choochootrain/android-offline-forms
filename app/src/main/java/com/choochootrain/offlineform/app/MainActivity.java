@@ -1,5 +1,7 @@
 package com.choochootrain.offlineform.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,19 +9,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.choochootrain.offlineform.app.forms.builder.FormBuilder;
 import com.choochootrain.offlineform.app.forms.data.FormConfig;
-import com.choochootrain.offlineform.app.forms.data.FormData;
-import com.choochootrain.offlineform.app.forms.queue.FormQueue;
 
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = "MainActivity";
 
-    private FormQueue formQueue;
     private FormBuilder formBuilder;
-    private Button submitButton;
     private LinearLayout formLayout;
 
     @Override
@@ -34,19 +33,6 @@ public class MainActivity extends ActionBarActivity {
         //TODO use external file for reading
         formBuilder = new FormBuilder(this, formLayout, FormConfig.load(this));
         formBuilder.populate();
-
-        submitButton = new Button(this);
-        submitButton.setText("submit");
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FormData data = formBuilder.processData();
-                formBuilder.submitData(data, formQueue);
-            }
-        });
-        formLayout.addView(submitButton);
-
-        formQueue = new FormQueue(this);
     }
 
     @Override
@@ -54,10 +40,7 @@ public class MainActivity extends ActionBarActivity {
         super.onResume();
 
         //clear and reload from FormConfig data
-        formLayout.removeAllViews();
-        formBuilder.load(FormConfig.load(this));
-        formBuilder.populate();
-        formLayout.addView(submitButton);
+        formBuilder.repopulate();
     }
 
     @Override
@@ -79,7 +62,27 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
                 break;
             case R.id.flush_cache:
-                formQueue.flush();
+                formBuilder.formQueue.flush();
+                break;
+            case R.id.change_target:
+                final EditText input = new EditText(MainActivity.this);
+                input.setText(formBuilder.getTarget());
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle(getString(R.string.change_target));
+                alert.setMessage(getString(R.string.change_target_description));
+                alert.setView(input);
+                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String value = input.getText().toString();
+                        formBuilder.setTarget(value);
+                        formBuilder.repopulate();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Do nothing.
+                    }
+                }).show();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

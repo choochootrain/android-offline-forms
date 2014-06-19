@@ -6,5 +6,7 @@
     <string name="flush_cache">Sync Offline</string>
     <string name="load_json">Load JSON</string>
     <string name="save_json">Save JSON</string>
+    <string name="change_target">Change Target</string>
+    <string name="change_target_description">Change the URL that forms will be submitted to</string>
 
 </resources>
