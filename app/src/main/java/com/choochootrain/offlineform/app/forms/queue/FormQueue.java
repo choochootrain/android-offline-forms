@@ -30,6 +30,7 @@ public class FormQueue {
         this.queueLocation = location;
         this.gson = new Gson();
         this.read();
+        this.write();
     }
 
     private boolean write() {
@@ -60,7 +61,7 @@ public class FormQueue {
                 stringBuffer.append(new String(buffer));
             }
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "queue file not found");
+            Log.e(TAG, "queue file not found, creating empty queue.");
         } catch (IOException e) {
             Log.e(TAG, "error reading from file");
         }
